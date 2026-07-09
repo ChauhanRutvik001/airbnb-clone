@@ -1,4 +1,4 @@
-import { FiAward, FiStar } from 'react-icons/fi';
+import { FiStar } from 'react-icons/fi';
 
 const reviewMetrics = [
   { label: 'Overall rating', value: '5' },
@@ -85,9 +85,25 @@ export default function PropertyReviewsSection() {
     <section className="border-b border-[#EBEBEB] pb-14 pt-6">
       <div className="flex flex-col items-center text-center">
         <div className="flex items-center justify-center gap-3 text-[#222] md:gap-5">
-          <FiAward className="hidden text-[58px] md:block" />
+          
+           {/* Left Laurel Wreath Asset */}
+            <img 
+              src="/laurel-left.png" 
+              alt="" 
+              className="h-[110px]"
+              draggable="false"
+              aria-hidden="true" 
+            />
           <div className="text-[72px] font-semibold leading-none tracking-[-0.05em] md:text-[96px]">4.95</div>
-          <FiAward className="hidden scale-x-[-1] text-[58px] md:block" />
+           {/* Right Laurel Wreath Asset */}
+            <img 
+              src="/laurel-right.png" 
+              alt="" 
+              className="h-[110px]"
+              draggable="false"
+              aria-hidden="true" 
+            />
+          
         </div>
         <h2 className="mt-7 text-[24px] font-semibold tracking-[-0.02em] text-[#222]">Guest favourite</h2>
         <p className="mt-3 max-w-[460px] text-[18px] leading-7 text-[#222]">

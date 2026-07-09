@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
-  FiAward,
   FiChevronDown,
   FiChevronLeft,
   FiChevronRight,
@@ -28,6 +28,10 @@ import { MdOutlineGridView } from 'react-icons/md';
 import { SiAirbnb } from 'react-icons/si';
 import PropertyLocationSection from './PropertyLocationSection';
 import PropertyReviewsSection from './PropertyReviewsSection';
+import MoreStaysNearby from './MoreStaysNearby';
+import MeetHost from './MeetHost';
+import ThingsToKnow from './ThingsToKnow';
+import GuestFavouriteBanner from './GuestFavouriteBanner';
 
 const tabs = ['Photos', 'Amenities', 'Reviews', 'Location'];
 
@@ -251,36 +255,17 @@ function ModalAmenityItem({ icon: Icon, label }) {
 }
 
 function ModalShell({ open, title, onClose, maxWidth = 'max-w-3xl', children }) {
-  const [shouldRender, setShouldRender] = useState(open);
-  const [isVisible, setIsVisible] = useState(open);
-
-  useEffect(() => {
-    if (open) {
-      setShouldRender(true);
-      window.requestAnimationFrame(() => setIsVisible(true));
-      return undefined;
-    }
-
-    setIsVisible(false);
-    const timeoutId = window.setTimeout(() => setShouldRender(false), 220);
-    return () => window.clearTimeout(timeoutId);
-  }, [open]);
-
-  if (!shouldRender) {
+  if (!open) {
     return null;
   }
 
   return (
     <div
-      className={`fixed inset-0 z-60 flex items-center justify-center bg-[#222]/55 px-4 py-6 backdrop-blur-sm transition-opacity duration-200 ease-out ${
-        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      }`}
+      className="fixed inset-0 z-60 flex items-center justify-center bg-[#222]/55 px-4 py-6 opacity-100 backdrop-blur-sm transition-opacity duration-200 ease-out"
       onMouseDown={onClose}
     >
       <div
-        className={`relative w-full ${maxWidth} rounded-3xl bg-white shadow-[0_24px_80px_rgba(0,0,0,0.24)] transition-[opacity,transform] duration-200 ease-out ${
-          isVisible ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-3 scale-[0.98] opacity-0'
-        }`}
+        className={`relative w-full ${maxWidth} rounded-3xl bg-white shadow-[0_24px_80px_rgba(0,0,0,0.24)]`}
         onMouseDown={(event) => event.stopPropagation()}
       >
         <button
@@ -356,8 +341,13 @@ export default function PropertyListing() {
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
   const [isAmenitiesModalOpen, setIsAmenitiesModalOpen] = useState(false);
   const photosSectionRef = useRef(null);
+  const navigate = useNavigate();
 
   const isAnyModalOpen = isDescriptionModalOpen || isAmenitiesModalOpen;
+
+  const openPhotoTour = () => {
+    navigate('/photo-tour');
+  };
 
   useEffect(() => {
     const updateHeaderVisibility = () => {
@@ -437,13 +427,23 @@ export default function PropertyListing() {
           <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-8 px-6 py-4 xl:px-12">
             <div className="flex items-center gap-8 text-[16px] font-medium text-[#717171]">
               {tabs.map((tab, index) => (
-                <button
-                  key={tab}
-                  type="button"
-                  className={`pb-2 transition ${index === 0 ? 'border-b-2 border-[#222] text-[#222]' : 'hover:text-[#222]'}`}
-                >
-                  {tab}
-                </button>
+                tab === 'Photos' ? (
+                  <Link
+                    key={tab}
+                    to="/photo-tour"
+                    className={`pb-2 transition ${index === 0 ? 'border-b-2 border-[#222] text-[#222]' : 'hover:text-[#222]'}`}
+                  >
+                    {tab}
+                  </Link>
+                ) : (
+                  <button
+                    key={tab}
+                    type="button"
+                    className={`pb-2 transition ${index === 0 ? 'border-b-2 border-[#222] text-[#222]' : 'hover:text-[#222]'}`}
+                  >
+                    {tab}
+                  </button>
+                )
               ))}
             </div>
 
@@ -498,6 +498,7 @@ export default function PropertyListing() {
                 {image.overlay ? (
                   <button
                     type="button"
+                    onClick={openPhotoTour}
                     className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-xl border border-[#B0B0B0] bg-white px-4 py-2 text-[14px] font-medium text-[#222] shadow-[0_2px_6px_rgba(0,0,0,0.15)]"
                   >
                     <MdOutlineGridView className="text-[16px]" />
@@ -511,8 +512,8 @@ export default function PropertyListing() {
 
         <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_420px] xl:gap-16">
           <div className="min-w-0 space-y-8">
-            <section className="rounded-[20px] border border-[#DDDDDD] bg-white px-6 py-5 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
-              <div className="flex flex-wrap items-center justify-between gap-4">
+            <section className="">
+              {/* <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-5">
                   <FiAward className="text-[34px] text-[#222]" />
                   <div>
@@ -536,7 +537,9 @@ export default function PropertyListing() {
                     <div className="text-[16px] text-[#222]">Reviews</div>
                   </div>
                 </div>
-              </div>
+              </div> */}
+
+              <GuestFavouriteBanner />
             </section>
 
             <section className="flex items-center gap-4 border-b border-[#EBEBEB] pb-8">
@@ -611,6 +614,8 @@ export default function PropertyListing() {
               </div>
             </section>
 
+            
+
             <section className="space-y-6 border-b border-[#EBEBEB] pb-10">
               <h2 className="text-[26px] font-semibold tracking-[-0.02em] text-[#222]">What this place offers</h2>
               <div className="grid gap-y-6 md:grid-cols-2 md:gap-x-16">
@@ -663,7 +668,7 @@ export default function PropertyListing() {
             
           </div>
 
-          <aside className="xl:sticky xl:top-28 xl:self-start">
+          <aside className="xl:sticky xl:top-26 xl:self-start">
             <div className="space-y-6">
               <div className="rounded-[18px] border border-[#DDDDDD] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.08)]">
                 <div className="flex items-start justify-between gap-4">
@@ -737,8 +742,12 @@ export default function PropertyListing() {
         </div>
 
         <PropertyReviewsSection />
+        <PropertyLocationSection />
+        <MeetHost />
+        <ThingsToKnow/>
+        <MoreStaysNearby />
+        
 
-            <PropertyLocationSection />
       </main>
 
       <ModalShell
