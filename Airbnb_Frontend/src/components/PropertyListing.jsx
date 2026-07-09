@@ -1,19 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   FiAward,
   FiChevronDown,
   FiChevronLeft,
   FiChevronRight,
+  FiCheck,
+  FiClock,
+  FiCoffee,
+  FiCamera,
+  FiDroplet,
   FiGlobe,
   FiHeart,
   FiHome,
+  FiLock,
   FiMapPin,
   FiSearch,
   FiShare2,
+  FiShield,
+  FiSun,
   FiStar,
   FiTv,
   FiWifi,
   FiWind,
+  FiX,
 } from 'react-icons/fi';
 import { MdOutlineGridView } from 'react-icons/md';
 import { SiAirbnb } from 'react-icons/si';
@@ -76,19 +85,6 @@ const sleepCards = [
   },
 ];
 
-const amenityItems = [
-  { icon: FiWifi, label: 'WiFi' },
-  { icon: FiWind, label: 'Air conditioning' },
-  { icon: FiTv, label: 'TV' },
-  { icon: FiHome, label: 'Private Jacuzzi' },
-  { icon: FiHome, label: 'Kitchen' },
-  { icon: FiMapPin, label: 'Free parking on premises' },
-  { icon: FiHome, label: 'Pool' },
-  { icon: FiHome, label: 'Hot tub' },
-  { icon: FiHome, label: 'Pets allowed' },
-  { icon: FiHome, label: 'Exterior security cameras on property' },
-];
-
 const octoberWeeks = [
   [' ', ' ', ' ', ' ', '1', '2', '3'],
   ['4', '5', '6', '7', '8', '9', '10'],
@@ -104,6 +100,195 @@ const novemberWeeks = [
   ['16', '17', '18', '19', '20', '21', '22'],
   ['23', '24', '25', '26', '27', '28', '29'],
 ];
+
+const descriptionParagraphs = [
+  '🌴 Plan Your Relaxing Holiday at Amor De Goa by Mirashya Homes! ✨ Stay in this cozy 1BHK in the heart of Candolim, featuring a private jacuzzi 🛁 for the perfect unwind.',
+  'Enjoy high-speed WiFi 💻, Smart TV 📺, pet-friendly comfort 🐾, and stylish interiors. Just minutes from Candolim Beach 🏖️, popular cafés, restaurants, and nightlife 🍹, it’s ideal for couples seeking romance, relaxation, and a touch of luxury in North Goa. 💗',
+];
+
+const featuredAmenities = [
+  { icon: FiWifi, label: 'WiFi' },
+  { icon: FiWind, label: 'Air conditioning' },
+  { icon: FiTv, label: 'TV' },
+  { icon: FiHome, label: 'Kitchen' },
+  { icon: FiMapPin, label: 'Free parking on premises' },
+  { icon: FiHome, label: 'Pool' },
+  { icon: FiHome, label: 'Hot tub' },
+  { icon: FiCheck, label: 'Self check-in' },
+];
+
+const amenityCategories = [
+  {
+    title: 'Bathroom',
+    items: [
+      { icon: FiWind, label: 'Hair dryer' },
+      { icon: FiDroplet, label: 'Shampoo' },
+      { icon: FiDroplet, label: 'Conditioner' },
+      { icon: FiDroplet, label: 'Hot water' },
+    ],
+  },
+  {
+    title: 'Bedroom & Laundry',
+    items: [
+      { icon: FiHome, label: 'Bed linens' },
+      { icon: FiHome, label: 'Extra pillows and blankets' },
+      { icon: FiHome, label: 'Iron' },
+      { icon: FiHome, label: 'Hangers' },
+    ],
+  },
+  {
+    title: 'Entertainment',
+    items: [
+      { icon: FiTv, label: 'TV' },
+      { icon: FiHome, label: 'Books and reading material' },
+      { icon: FiHome, label: 'Sound system' },
+      { icon: FiHome, label: 'Board games' },
+    ],
+  },
+  {
+    title: 'Family',
+    items: [
+      { icon: FiHome, label: 'Crib' },
+      { icon: FiHome, label: 'High chair' },
+      { icon: FiHome, label: 'Babysitter recommendations' },
+      { icon: FiHome, label: 'Children’s books and toys' },
+    ],
+  },
+  {
+    title: 'Heating & Cooling',
+    items: [
+      { icon: FiWind, label: 'Air conditioning' },
+      { icon: FiWind, label: 'Ceiling fan' },
+      { icon: FiSun, label: 'Portable heater' },
+      { icon: FiSun, label: 'Room-darkening shades' },
+    ],
+  },
+  {
+    title: 'Home Safety',
+    items: [
+      { icon: FiShield, label: 'Smoke alarm' },
+      { icon: FiShield, label: 'Carbon monoxide alarm' },
+      { icon: FiShield, label: 'First aid kit' },
+      { icon: FiCamera, label: 'Exterior security cameras on property' },
+    ],
+  },
+  {
+    title: 'Internet & Office',
+    items: [
+      { icon: FiWifi, label: 'WiFi' },
+      { icon: FiHome, label: 'Dedicated workspace' },
+      { icon: FiHome, label: 'Ethernet connection' },
+      { icon: FiClock, label: 'Laptop-friendly workspace' },
+    ],
+  },
+  {
+    title: 'Kitchen & Dining',
+    items: [
+      { icon: FiHome, label: 'Kitchen' },
+      { icon: FiCoffee, label: 'Coffee maker' },
+      { icon: FiHome, label: 'Microwave' },
+      { icon: FiHome, label: 'Blender' },
+    ],
+  },
+  {
+    title: 'Location Features',
+    items: [
+      { icon: FiMapPin, label: 'Beach access' },
+      { icon: FiMapPin, label: 'Private entrance' },
+      { icon: FiMapPin, label: 'Resort access' },
+      { icon: FiMapPin, label: 'Sea view' },
+    ],
+  },
+  {
+    title: 'Outdoor',
+    items: [
+      { icon: FiSun, label: 'Patio or balcony' },
+      { icon: FiSun, label: 'Outdoor furniture' },
+      { icon: FiSun, label: 'Sun loungers' },
+      { icon: FiSun, label: 'Garden view' },
+    ],
+  },
+  {
+    title: 'Parking & Facilities',
+    items: [
+      { icon: FiMapPin, label: 'Free parking on premises' },
+      { icon: FiHome, label: 'Pool' },
+      { icon: FiHome, label: 'Hot tub' },
+      { icon: FiHome, label: 'Gym' },
+      { icon: FiHome, label: 'Elevator' },
+    ],
+  },
+  {
+    title: 'Services',
+    items: [
+      { icon: FiCheck, label: 'Self check-in' },
+      { icon: FiCheck, label: 'Cleaning available during stay' },
+      { icon: FiLock, label: 'Long-term stays allowed' },
+      { icon: FiCheck, label: 'Luggage dropoff allowed' },
+      { icon: FiCheck, label: 'Pets allowed' },
+    ],
+  },
+];
+
+function AmenityItem({ icon: Icon, label }) {
+  return (
+    <div className="flex items-center gap-4 text-[18px] text-[#222]">
+      <Icon className="text-[28px] text-[#222]" />
+      <span>{label}</span>
+    </div>
+  );
+}
+
+function ModalShell({ open, title, onClose, maxWidth = 'max-w-3xl', children }) {
+  const [shouldRender, setShouldRender] = useState(open);
+  const [isVisible, setIsVisible] = useState(open);
+
+  useEffect(() => {
+    if (open) {
+      setShouldRender(true);
+      window.requestAnimationFrame(() => setIsVisible(true));
+      return undefined;
+    }
+
+    setIsVisible(false);
+    const timeoutId = window.setTimeout(() => setShouldRender(false), 220);
+    return () => window.clearTimeout(timeoutId);
+  }, [open]);
+
+  if (!shouldRender) {
+    return null;
+  }
+
+  return (
+    <div
+      className={`fixed inset-0 z-60 flex items-center justify-center bg-[#222]/55 px-4 py-6 backdrop-blur-sm transition-opacity duration-200 ease-out ${
+        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}
+      onMouseDown={onClose}
+    >
+      <div
+        className={`relative w-full ${maxWidth} rounded-3xl bg-white shadow-[0_24px_80px_rgba(0,0,0,0.24)] transition-[opacity,transform] duration-200 ease-out ${
+          isVisible ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-3 scale-[0.98] opacity-0'
+        }`}
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button
+          type="button"
+          aria-label="Close modal"
+          onClick={onClose}
+          className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#DDDDDD] bg-white text-[#222] shadow-[0_1px_3px_rgba(0,0,0,0.12)] transition hover:bg-[#F7F7F7]"
+        >
+          <FiX className="text-[18px]" />
+        </button>
+
+        <div className="max-h-[80vh] overflow-y-auto px-6 py-6 sm:px-8 sm:py-8">
+          <h2 className="pr-12 text-[26px] font-semibold tracking-[-0.02em] text-[#222]">{title}</h2>
+          <div className="mt-6">{children}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function TopButton({ children, className = '' }) {
   return (
@@ -156,19 +341,55 @@ function CalendarMonth({ title, weeks, leftArrow = false, rightArrow = false, se
 
 export default function PropertyListing() {
   const [isSaved, setIsSaved] = useState(false);
+  const [isStickyVisible, setIsStickyVisible] = useState(false);
+  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
+  const [isAmenitiesModalOpen, setIsAmenitiesModalOpen] = useState(false);
+  const photosSectionRef = useRef(null);
+
+  const isAnyModalOpen = isDescriptionModalOpen || isAmenitiesModalOpen;
+
+  useEffect(() => {
+    const updateHeaderVisibility = () => {
+      const photosTop = photosSectionRef.current?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY;
+      setIsStickyVisible(photosTop <= 0);
+    };
+
+    updateHeaderVisibility();
+
+    window.addEventListener('scroll', updateHeaderVisibility, { passive: true });
+    window.addEventListener('resize', updateHeaderVisibility);
+
+    return () => {
+      window.removeEventListener('scroll', updateHeaderVisibility);
+      window.removeEventListener('resize', updateHeaderVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = isAnyModalOpen ? 'hidden' : previousOverflow;
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isAnyModalOpen]);
 
   return (
     <div className="min-h-screen bg-white text-[#222]">
-      <header className="sticky top-0 z-40 border-b border-[#EBEBEB] bg-white/95 backdrop-blur">
-        <div className="mx-auto flex h-[88px] max-w-[1560px] items-center justify-between gap-4 px-6 xl:px-12">
+      <header
+        className={`border-b border-[#EBEBEB] bg-white/95 backdrop-blur transition-[opacity,transform] duration-300 ease-out ${
+          isStickyVisible ? 'pointer-events-none -translate-y-3 opacity-0' : 'translate-y-0 opacity-100'
+        }`}
+      >
+        <div className="mx-auto flex h-22 max-w-[1560px] items-center justify-between gap-4 px-6 xl:px-12">
           <button type="button" className="flex items-center gap-2 text-[#ff385c]">
             <SiAirbnb className="text-[42px]" />
-            <span className="sr-only">Airbnb</span>
+            <span className="text-[31px] font-semibold tracking-[-0.04em] text-[#ff385c]">airbnb</span>
           </button>
 
           <button
             type="button"
-            className="hidden min-w-[360px] items-center gap-4 rounded-full border border-[#DDDDDD] bg-white px-4 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.08)] lg:flex xl:min-w-[548px]"
+            className="hidden min-w-90 items-center gap-4 rounded-full border border-[#DDDDDD] bg-white px-4 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.08)] lg:flex xl:min-w-137"
           >
             <span className="flex items-center gap-3 pr-4 text-[15px] font-semibold text-[#222]">
               <span className="text-[20px]">🏠</span>
@@ -195,13 +416,17 @@ export default function PropertyListing() {
             </TopButton>
             <TopButton className="gap-3 px-3 py-3">
               <span className="text-[20px] leading-none">☰</span>
-              <span className="h-7 w-7 rounded-full bg-[#B0B0B0]" />
+              
             </TopButton>
           </div>
         </div>
       </header>
 
-      <nav className="sticky top-[88px] z-30 border-b border-[#EBEBEB] bg-white">
+      <div
+        className={`fixed left-0 right-0 top-0 z-50 border-b border-[#EBEBEB] bg-white transition-[opacity,transform] duration-300 ease-out ${
+          isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0 pointer-events-none'
+        }`}
+      >
         <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-8 px-6 py-4 xl:px-12">
           <div className="flex items-center gap-8 text-[16px] font-medium text-[#717171]">
             {tabs.map((tab, index) => (
@@ -228,17 +453,17 @@ export default function PropertyListing() {
             </div>
             <button
               type="button"
-              className="rounded-full bg-gradient-to-r from-[#ff385c] to-[#d70466] px-6 py-3 text-[16px] font-semibold text-white shadow-[0_8px_20px_rgba(255,56,92,0.25)] transition hover:brightness-105"
+              className="rounded-full bg-linear-to-r from-[#ff385c] to-[#d70466] px-6 py-3 text-[16px] font-semibold text-white shadow-[0_8px_20px_rgba(255,56,92,0.25)] transition hover:brightness-105"
             >
               Reserve
             </button>
           </div>
         </div>
-      </nav>
+      </div>
 
       <main className="mx-auto max-w-[1560px] px-6 pb-20 pt-8 xl:px-12">
         <div className="mb-6 flex items-start justify-between gap-8">
-          <h1 className="max-w-[980px] text-[32px] font-semibold tracking-[-0.03em] text-[#222] md:text-[38px]">
+          <h1 className="max-w-245 text-[32px] font-semibold tracking-[-0.03em] text-[#222] md:text-[38px]">
             Romantic Jacuzzi 1BHK Candolim | Mirashya UG10
           </h1>
 
@@ -258,13 +483,10 @@ export default function PropertyListing() {
           </div>
         </div>
 
-        <section className="mb-10 overflow-hidden rounded-[22px]">
-          <div className="grid h-[520px] grid-cols-4 grid-rows-2 gap-2 overflow-hidden">
+        <section ref={photosSectionRef} className="mb-10 overflow-hidden rounded-[22px]">
+          <div className="grid h-130 grid-cols-4 grid-rows-2 gap-2 overflow-hidden">
             {galleryImages.map((image) => (
-              <div
-                key={image.alt}
-                className={`relative overflow-hidden bg-[#F3F3F3] ${image.className ?? ''}`}
-              >
+              <div key={image.alt} className={`relative overflow-hidden bg-[#F3F3F3] ${image.className ?? ''}`}>
                 <img src={image.src} alt={image.alt} className="h-full w-full object-cover" />
                 {image.overlay ? (
                   <button
@@ -335,20 +557,38 @@ export default function PropertyListing() {
               })}
             </section>
 
-            <section className="rounded-[14px] bg-[#F7F7F7] px-5 py-4 text-[16px] leading-7 text-[#222]">
-              Some info has been automatically translated.{' '}
-              <button type="button" className="font-semibold underline underline-offset-4">
-                Show original
-              </button>
-            </section>
+            <section className="space-y-4">
+              <div className="rounded-[14px] bg-[#F7F7F7] px-5 py-4 text-[16px] leading-7 text-[#222]">
+                Some info has been automatically translated.{' '}
+                <button type="button" className="font-semibold underline underline-offset-4">
+                  Show original
+                </button>
+              </div>
 
-            <section className="space-y-3 text-[18px] leading-8 text-[#222]">
-              <p>
-                🌴 Plan Your Relaxing Holiday at Amor De Goa by Mirashya Homes! ✨ Stay in this cozy 1BHK in the heart of Candolim, featuring a private jacuzzi 🛁 for the perfect unwind.
-              </p>
-              <p>
-                Enjoy high-speed WiFi 💻, Smart TV 📺, pet-friendly comfort 🐾, and stylish interiors. Just minutes from Candolim Beach 🏖️, popular cafés, restaurants, and nightlife 🍹, it’s ideal for couples seeking romance, relaxation, and a touch of luxury in North Goa. 💗
-              </p>
+              <div className="space-y-3 text-[18px] leading-8 text-[#222]">
+                <div
+                  className="overflow-hidden"
+                  style={{
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 4,
+                  }}
+                >
+                  {descriptionParagraphs.map((paragraph) => (
+                    <p key={paragraph} className="mb-3 last:mb-0">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsDescriptionModalOpen(true)}
+                  className="text-[18px] font-semibold text-[#222] underline underline-offset-4 transition hover:text-black"
+                >
+                  Show more
+                </button>
+              </div>
             </section>
 
             <section className="border-y border-[#EBEBEB] py-10">
@@ -356,7 +596,7 @@ export default function PropertyListing() {
               <div className="mt-6 grid gap-6 md:grid-cols-2">
                 {sleepCards.map((card) => (
                   <article key={card.title} className="space-y-3">
-                    <img src={card.src} alt={card.title} className="h-[260px] w-full rounded-[16px] object-cover" />
+                    <img src={card.src} alt={card.title} className="h-65 w-full rounded-2xl object-cover" />
                     <h3 className="text-[18px] font-semibold text-[#222]">{card.title}</h3>
                     <p className="text-[16px] text-[#717171]">{card.subtitle}</p>
                   </article>
@@ -367,18 +607,14 @@ export default function PropertyListing() {
             <section className="space-y-6 border-b border-[#EBEBEB] pb-10">
               <h2 className="text-[26px] font-semibold tracking-[-0.02em] text-[#222]">What this place offers</h2>
               <div className="grid gap-y-6 md:grid-cols-2 md:gap-x-16">
-                {amenityItems.map((amenity) => {
+                {featuredAmenities.map((amenity) => {
                   const Icon = amenity.icon;
-                  return (
-                    <div key={amenity.label} className="flex items-center gap-4 text-[18px] text-[#222]">
-                      <Icon className="text-[28px] text-[#222]" />
-                      <span>{amenity.label}</span>
-                    </div>
-                  );
+                  return <AmenityItem key={amenity.label} icon={Icon} label={amenity.label} />;
                 })}
               </div>
               <button
                 type="button"
+                onClick={() => setIsAmenitiesModalOpen(true)}
                 className="rounded-[14px] border border-[#222] px-6 py-4 text-[18px] font-semibold text-[#222] transition hover:bg-[#F7F7F7]"
               >
                 Show all 50 amenities
@@ -418,7 +654,7 @@ export default function PropertyListing() {
             </section>
           </div>
 
-          <aside className="xl:sticky xl:top-[148px] xl:self-start">
+          <aside className="xl:sticky xl:top-37 xl:self-start">
             <div className="space-y-6">
               <div className="rounded-[18px] border border-[#DDDDDD] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.08)]">
                 <div className="flex items-start justify-between gap-4">
@@ -469,7 +705,7 @@ export default function PropertyListing() {
 
                 <button
                   type="button"
-                  className="mt-5 w-full rounded-full bg-gradient-to-r from-[#ff385c] to-[#d70466] py-4 text-[18px] font-semibold text-white shadow-[0_8px_22px_rgba(255,56,92,0.26)] transition hover:brightness-105"
+                  className="mt-5 w-full rounded-full bg-linear-to-r from-[#ff385c] to-[#d70466] py-4 text-[18px] font-semibold text-white shadow-[0_8px_22px_rgba(255,56,92,0.26)] transition hover:brightness-105"
                 >
                   Reserve
                 </button>
@@ -487,6 +723,43 @@ export default function PropertyListing() {
           </aside>
         </div>
       </main>
+
+      <ModalShell
+        open={isDescriptionModalOpen}
+        title="About this place"
+        onClose={() => setIsDescriptionModalOpen(false)}
+        maxWidth="max-w-2xl"
+      >
+        <div className="space-y-4 text-[18px] leading-8 text-[#222]">
+          {descriptionParagraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </ModalShell>
+
+      <ModalShell
+        open={isAmenitiesModalOpen}
+        title="What this place offers"
+        onClose={() => setIsAmenitiesModalOpen(false)}
+        maxWidth="max-w-4xl"
+      >
+        <div className="space-y-8">
+          {amenityCategories.map((category, categoryIndex) => (
+            <section
+              key={category.title}
+              className={`${categoryIndex === 0 ? '' : 'border-t border-[#EBEBEB] pt-8'}`}
+            >
+              <h3 className="text-[20px] font-semibold tracking-[-0.02em] text-[#222]">{category.title}</h3>
+              <div className="mt-5 grid gap-y-5 md:grid-cols-2 md:gap-x-16">
+                {category.items.map((amenity) => {
+                  const Icon = amenity.icon;
+                  return <AmenityItem key={`${category.title}-${amenity.label}`} icon={Icon} label={amenity.label} />;
+                })}
+              </div>
+            </section>
+          ))}
+        </div>
+      </ModalShell>
     </div>
   );
 }
