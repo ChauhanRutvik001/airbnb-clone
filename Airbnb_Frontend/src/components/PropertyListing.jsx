@@ -387,88 +387,88 @@ export default function PropertyListing() {
 
   return (
     <div className="min-h-screen bg-white text-[#222]">
-      <header className="border-b border-[#EBEBEB] bg-white/95 backdrop-blur">
-        <div className="mx-auto flex h-22 max-w-[1560px] items-center justify-between gap-4 px-6 xl:px-12">
-          <button type="button" className="flex items-center gap-2 text-[#ff385c]">
-            <SiAirbnb className="text-[42px]" />
-            <span className="text-[31px] font-semibold tracking-[-0.04em] text-[#ff385c]">airbnb</span>
-          </button>
+        <header className="border-b border-[#EBEBEB] bg-white/95 backdrop-blur">
+          <div className="mx-auto flex h-22 max-w-[1560px] items-center justify-between gap-4 px-6 xl:px-12">
+            <button type="button" className="flex items-center gap-2 text-[#ff385c]">
+              <SiAirbnb className="text-[42px]" />
+              <span className="text-[31px] font-semibold tracking-[-0.04em] text-[#ff385c]">airbnb</span>
+            </button>
 
-          <button
-            type="button"
-            className="hidden min-w-90 items-center gap-4 rounded-full border border-[#DDDDDD] bg-white px-4 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.08)] lg:flex xl:min-w-137"
-          >
-            <span className="flex items-center gap-3 pr-4 text-[15px] font-semibold text-[#222]">
-              <span className="text-[20px]">🏠</span>
-              Anywhere
-            </span>
-            <span className="h-7 w-px bg-[#DDDDDD]" />
-            <span className="flex-1 text-center text-[15px] font-semibold text-[#222]">Anytime</span>
-            <span className="h-7 w-px bg-[#DDDDDD]" />
-            <span className="flex-1 text-left text-[15px] text-[#717171]">Add guests</span>
-            <span className="ml-auto flex h-10 w-10 items-center justify-center rounded-full bg-[#FF385C] text-white shadow-sm">
-              <FiSearch className="text-[18px]" />
-            </span>
-          </button>
-
-          <div className="flex items-center gap-3">
             <button
               type="button"
-              className="hidden rounded-full px-4 py-3 text-sm font-medium text-[#222] transition hover:bg-[#F7F7F7] md:block"
+              className="hidden min-w-90 items-center gap-4 rounded-full border border-[#DDDDDD] bg-white px-4 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.08)] lg:flex xl:min-w-137"
             >
-              Become a host
+              <span className="flex items-center gap-3 pr-4 text-[15px] font-semibold text-[#222]">
+                <span className="text-[20px]">🏠</span>
+                Anywhere
+              </span>
+              <span className="h-7 w-px bg-[#DDDDDD]" />
+              <span className="flex-1 text-center text-[15px] font-semibold text-[#222]">Anytime</span>
+              <span className="h-7 w-px bg-[#DDDDDD]" />
+              <span className="flex-1 text-left text-[15px] text-[#717171]">Add guests</span>
+              <span className="ml-auto flex h-10 w-10 items-center justify-center rounded-full bg-[#FF385C] text-white shadow-sm">
+                <FiSearch className="text-[18px]" />
+              </span>
             </button>
-            <TopButton className="px-3 py-3">
-              <FiGlobe className="text-[18px]" />
-            </TopButton>
-            <TopButton className="gap-3 px-3 py-3">
-              <span className="text-[20px] leading-none">☰</span>
-              
-            </TopButton>
-          </div>
-        </div>
-      </header>
 
-      <div
-        className={`fixed left-0 right-0 top-0 z-50 border-b border-[#EBEBEB] bg-white transition-[opacity,transform] duration-500 ease-out ${
-          isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0 pointer-events-none'
-        }`}
-      >
-        <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-8 px-6 py-4 xl:px-12">
-          <div className="flex items-center gap-8 text-[16px] font-medium text-[#717171]">
-            {tabs.map((tab, index) => (
+            <div className="flex items-center gap-3">
               <button
-                key={tab}
                 type="button"
-                className={`pb-2 transition ${index === 0 ? 'border-b-2 border-[#222] text-[#222]' : 'hover:text-[#222]'}`}
+                className="hidden rounded-full px-4 py-3 text-sm font-medium text-[#222] transition hover:bg-[#F7F7F7] md:block"
               >
-                {tab}
+                Become a host
               </button>
-            ))}
-          </div>
-
-          <div className="hidden items-center gap-4 lg:flex">
-            <div className="text-right">
-              <div className="text-[16px] font-semibold leading-none text-[#222]">
-                ₹28,499 <span className="font-normal text-[#717171]">for 5 nights</span>
-              </div>
-              <div className="mt-1 flex items-center justify-end gap-1 text-[14px] text-[#222]">
-                <FiStar className="text-[12px] fill-[#222]" />
-                <span>4.95</span>
-                <span className="text-[#717171]">· 19 reviews</span>
-              </div>
+              <TopButton className="px-3 py-3">
+                <FiGlobe className="text-[18px]" />
+              </TopButton>
+              <TopButton className="gap-3 px-3 py-3">
+                <span className="text-[20px] leading-none">☰</span>
+                
+              </TopButton>
             </div>
-            <button
-              type="button"
-              className="rounded-full bg-linear-to-r from-[#ff385c] to-[#d70466] px-6 py-3 text-[16px] font-semibold text-white shadow-[0_8px_20px_rgba(255,56,92,0.25)] transition hover:brightness-105"
-            >
-              Reserve
-            </button>
+          </div>
+        </header>
+
+        <div
+          className={`fixed left-0 right-0 top-0 z-50 border-b border-[#EBEBEB] bg-white transition-[opacity,transform] duration-800 ease-out ${
+            isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0 pointer-events-none'
+          }`}
+        >
+          <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-8 px-6 py-4 xl:px-12">
+            <div className="flex items-center gap-8 text-[16px] font-medium text-[#717171]">
+              {tabs.map((tab, index) => (
+                <button
+                  key={tab}
+                  type="button"
+                  className={`pb-2 transition ${index === 0 ? 'border-b-2 border-[#222] text-[#222]' : 'hover:text-[#222]'}`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+
+            <div className="hidden items-center gap-4 lg:flex">
+              <div className="text-right">
+                <div className="text-[16px] font-semibold leading-none text-[#222]">
+                  ₹28,499 <span className="font-normal text-[#717171]">for 5 nights</span>
+                </div>
+                <div className="mt-1 flex items-center justify-end gap-1 text-[14px] text-[#222]">
+                  <FiStar className="text-[12px] fill-[#222]" />
+                  <span>4.95</span>
+                  <span className="text-[#717171]">· 19 reviews</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="rounded-full bg-linear-to-r from-[#ff385c] to-[#d70466] px-6 py-3 text-[16px] font-semibold text-white shadow-[0_8px_20px_rgba(255,56,92,0.25)] transition hover:brightness-105"
+              >
+                Reserve
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <main className="mx-auto max-w-[1560px] px-6 pb-20 pt-8 xl:px-12">
+      <main className="mx-auto max-w-[1200px] px-6 pb-20 pt-8 xl:px-12">
         <div className="mb-6 flex items-start justify-between gap-8">
           <h1 className="max-w-245 text-[32px] font-semibold tracking-[-0.03em] text-[#222] md:text-[38px]">
             Romantic Jacuzzi 1BHK Candolim | Mirashya UG10
@@ -660,12 +660,10 @@ export default function PropertyListing() {
               </div>
             </section>
 
-            <PropertyReviewsSection />
-
-            <PropertyLocationSection />
+            
           </div>
 
-          <aside className="xl:sticky xl:top-37 xl:self-start">
+          <aside className="xl:sticky xl:top-28 xl:self-start">
             <div className="space-y-6">
               <div className="rounded-[18px] border border-[#DDDDDD] bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.08)]">
                 <div className="flex items-start justify-between gap-4">
@@ -724,15 +722,23 @@ export default function PropertyListing() {
                 <p className="mt-4 text-center text-[16px] text-[#717171]">You won't be charged yet</p>
               </div>
 
-              <div className="text-center">
+               
+
+             
+            </div>
+
+            <div className="text-center">
                 <button type="button" className="inline-flex items-center gap-2 text-[16px] text-[#717171] underline underline-offset-4 hover:text-[#222]">
                   <span className="text-[18px]">⚑</span>
                   Report this listing
                 </button>
               </div>
-            </div>
           </aside>
         </div>
+
+        <PropertyReviewsSection />
+
+            <PropertyLocationSection />
       </main>
 
       <ModalShell
