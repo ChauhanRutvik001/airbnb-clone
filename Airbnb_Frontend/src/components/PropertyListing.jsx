@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiHeart, FiShare2 } from 'react-icons/fi';
+import { FiCamera, FiCheck, FiClock, FiCoffee, FiDroplet, FiHeart, FiHome, FiLock, FiMapPin, FiShare2, FiShield, FiSun, FiTv, FiWifi, FiWind } from 'react-icons/fi';
 import { MdOutlineGridView } from 'react-icons/md';
-import { listingTabs, galleryImages, perks, sleepCards, octoberWeeks, novemberWeeks, descriptionParagraphs, featuredAmenities, amenityCategories } from './propertyListing/data';
 import { FiChevronDown, FiGlobe, FiSearch, FiStar, SiAirbnb, ModalShell, ModalAmenityItem, TopButton } from './propertyListing/sharedComponents';
 import { DetailsColumn, GallerySection, SidebarColumn } from './propertyListing/ListingSections';
 import PropertyReviewsSection from './PropertyReviewsSection';
@@ -10,12 +9,46 @@ import PropertyLocationSection from './PropertyLocationSection';
 import MeetHost from './MeetHost';
 import ThingsToKnow from './ThingsToKnow';
 import MoreStaysNearby from './MoreStaysNearby';
+import { fetchDefaultListing } from '../services/listingApi';
+
+const ICON_MAP = {
+  wifi: FiWifi,
+  wind: FiWind,
+  tv: FiTv,
+  home: FiHome,
+  mapPin: FiMapPin,
+  check: FiCheck,
+  droplet: FiDroplet,
+  sun: FiSun,
+  shield: FiShield,
+  camera: FiCamera,
+  lock: FiLock,
+  coffee: FiCoffee,
+  clock: FiClock,
+};
+
+const defaultListingData = {
+  title: 'Romantic Jacuzzi 1BHK Candolim | Mirashya UG10',
+  content: {
+    listingTabs: ['Photos', 'Amenities', 'Reviews', 'Location'],
+    galleryImages: [],
+    perks: [],
+    sleepCards: [],
+    octoberWeeks: [],
+    novemberWeeks: [],
+    descriptionParagraphs: [],
+    featuredAmenities: [],
+    amenityCategories: [],
+  },
+};
 
 export default function PropertyListing() {
   const [isSaved, setIsSaved] = useState(false);
   const [isStickyVisible, setIsStickyVisible] = useState(false);
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
   const [isAmenitiesModalOpen, setIsAmenitiesModalOpen] = useState(false);
+  const [listing, setListing] = useState(defaultListingData);
+  const [isLoading, setIsLoading] = useState(true);
   const photosSectionRef = useRef(null);
   const navigate = useNavigate();
 
@@ -41,6 +74,23 @@ export default function PropertyListing() {
   }, []);
 
   useEffect(() => {
+    const loadListing = async () => {
+      try {
+        const response = await fetchDefaultListing();
+        if (response) {
+          setListing(response);
+        }
+      } catch (error) {
+        console.error('Unable to fetch property listing from backend', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadListing();
+  }, []);
+
+  useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = isDescriptionModalOpen || isAmenitiesModalOpen ? 'hidden' : previousOverflow;
 
@@ -48,6 +98,32 @@ export default function PropertyListing() {
       document.body.style.overflow = previousOverflow;
     };
   }, [isDescriptionModalOpen, isAmenitiesModalOpen]);
+
+  const listingTabs = listing?.content?.listingTabs ?? [];
+  const galleryImages = listing?.content?.galleryImages ?? [];
+  const perks = (listing?.content?.perks ?? []).map((perk) => ({
+    ...perk,
+    icon: ICON_MAP[perk.icon] ?? FiHome,
+  }));
+  const sleepCards = listing?.content?.sleepCards ?? [];
+  const octoberWeeks = listing?.content?.octoberWeeks ?? [];
+  const novemberWeeks = listing?.content?.novemberWeeks ?? [];
+  const descriptionParagraphs = listing?.content?.descriptionParagraphs ?? [];
+  const featuredAmenities = (listing?.content?.featuredAmenities ?? []).map((item) => ({
+    ...item,
+    icon: ICON_MAP[item.icon] ?? FiHome,
+  }));
+  const amenityCategories = (listing?.content?.amenityCategories ?? []).map((category) => ({
+    ...category,
+    items: (category.items ?? []).map((item) => ({
+      ...item,
+      icon: ICON_MAP[item.icon] ?? FiHome,
+    })),
+  }));
+
+  if (isLoading) {
+    return <div className="p-8 text-[16px] text-[#717171]">Loading property...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-white text-[#222]">
@@ -144,7 +220,7 @@ export default function PropertyListing() {
       <main className="mx-auto max-w-[1200px] px-6 pb-20 pt-8 xl:px-12">
         <div className="mb-6 flex items-start justify-between gap-8">
           <h1 className="max-w-245 text-[32px] font-semibold tracking-[-0.03em] text-[#222] md:text-[38px]">
-            Romantic Jacuzzi 1BHK Candolim | Mirashya UG10
+            {listing?.title}
           </h1>
 
           <div className="hidden items-center gap-6 pt-2 md:flex">

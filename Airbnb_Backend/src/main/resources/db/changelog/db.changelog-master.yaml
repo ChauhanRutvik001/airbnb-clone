@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-initialize
+      author: cursor
+      changes:
+        - sql:
+            sql: SELECT 1;
