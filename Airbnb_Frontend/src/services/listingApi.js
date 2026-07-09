@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api/listings';
+const API_BASE_URL = `${process.env.VITE_APP_API_URL || '/api'}/listings`;
 
 export async function fetchDefaultListing() {
   const response = await fetch(`${API_BASE_URL}`);

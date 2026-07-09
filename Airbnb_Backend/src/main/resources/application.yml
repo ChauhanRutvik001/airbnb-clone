@@ -3,9 +3,10 @@ spring:
     name: SpringBootTask
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/AirbnbDB
-    username: postgres
-    password: Chauhan
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/AirbnbDB}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:Chauhan}
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -28,18 +29,20 @@ spring:
     encoding: UTF-8
 
 server:
-  port: 8080
-
+  port: ${PORT:8080}
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO
 
 springdoc:
   api-docs:
     path: /api-docs
-
   swagger-ui:
     path: /swagger-ui.html
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
