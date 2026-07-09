@@ -26,6 +26,8 @@ import {
 } from 'react-icons/fi';
 import { MdOutlineGridView } from 'react-icons/md';
 import { SiAirbnb } from 'react-icons/si';
+import PropertyLocationSection from './PropertyLocationSection';
+import PropertyReviewsSection from './PropertyReviewsSection';
 
 const tabs = ['Photos', 'Amenities', 'Reviews', 'Location'];
 
@@ -239,6 +241,15 @@ function AmenityItem({ icon: Icon, label }) {
   );
 }
 
+function ModalAmenityItem({ icon: Icon, label }) {
+  return (
+    <div className="flex items-center gap-4 py-4 text-[18px] text-[#222]">
+      <Icon className="text-[26px] text-[#222]" />
+      <span>{label}</span>
+    </div>
+  );
+}
+
 function ModalShell({ open, title, onClose, maxWidth = 'max-w-3xl', children }) {
   const [shouldRender, setShouldRender] = useState(open);
   const [isVisible, setIsVisible] = useState(open);
@@ -376,11 +387,7 @@ export default function PropertyListing() {
 
   return (
     <div className="min-h-screen bg-white text-[#222]">
-      <header
-        className={`border-b border-[#EBEBEB] bg-white/95 backdrop-blur transition-[opacity,transform] duration-300 ease-out ${
-          isStickyVisible ? 'pointer-events-none -translate-y-3 opacity-0' : 'translate-y-0 opacity-100'
-        }`}
-      >
+      <header className="border-b border-[#EBEBEB] bg-white/95 backdrop-blur">
         <div className="mx-auto flex h-22 max-w-[1560px] items-center justify-between gap-4 px-6 xl:px-12">
           <button type="button" className="flex items-center gap-2 text-[#ff385c]">
             <SiAirbnb className="text-[42px]" />
@@ -423,8 +430,8 @@ export default function PropertyListing() {
       </header>
 
       <div
-        className={`fixed left-0 right-0 top-0 z-50 border-b border-[#EBEBEB] bg-white transition-[opacity,transform] duration-300 ease-out ${
-          isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0 pointer-events-none'
+        className={`fixed left-0 right-0 top-0 z-50 border-b border-[#EBEBEB] bg-white transition-[opacity,transform] duration-500 ease-out ${
+          isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0 pointer-events-none'
         }`}
       >
         <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-8 px-6 py-4 xl:px-12">
@@ -652,6 +659,10 @@ export default function PropertyListing() {
                 </button>
               </div>
             </section>
+
+            <PropertyReviewsSection />
+
+            <PropertyLocationSection />
           </div>
 
           <aside className="xl:sticky xl:top-37 xl:self-start">
@@ -750,10 +761,10 @@ export default function PropertyListing() {
               className={`${categoryIndex === 0 ? '' : 'border-t border-[#EBEBEB] pt-8'}`}
             >
               <h3 className="text-[20px] font-semibold tracking-[-0.02em] text-[#222]">{category.title}</h3>
-              <div className="mt-5 grid gap-y-5 md:grid-cols-2 md:gap-x-16">
+              <div className="mt-4 divide-y divide-[#EBEBEB]">
                 {category.items.map((amenity) => {
                   const Icon = amenity.icon;
-                  return <AmenityItem key={`${category.title}-${amenity.label}`} icon={Icon} label={amenity.label} />;
+                  return <ModalAmenityItem key={`${category.title}-${amenity.label}`} icon={Icon} label={amenity.label} />;
                 })}
               </div>
             </section>
