@@ -1,7 +1,9 @@
-const API_BASE_URL = `${process.env.VITE_APP_API_URL || '/api'}/listings`;
+const API_BASE_URL = `${
+  import.meta.env.VITE_API_URL || "http://localhost:8080"
+}/api/listings`;
 
 export async function fetchDefaultListing() {
-  const response = await fetch(`${API_BASE_URL}`);
+  const response = await fetch(API_BASE_URL);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch listing. Status: ${response.status}`);
@@ -9,6 +11,6 @@ export async function fetchDefaultListing() {
 
   const body = await response.json();
   const listings = body?.data ?? [];
-  // Return the first listing as the default
+
   return listings.length > 0 ? listings[0] : null;
 }
