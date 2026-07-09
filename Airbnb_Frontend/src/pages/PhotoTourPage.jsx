@@ -141,8 +141,9 @@ const PhotoTourHeader = ({ onBack, isSaved, onToggleSaved }) => (
 );
 
 const SectionNav = ({ sections, activeId, onSelect }) => (
-  <div className="bg-white border-b border-[#EBEBEB] pt-6 pb-4 sticky top-16 z-40 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-    <div className="max-w-[1120px] mx-auto px-6 flex gap-3 md:gap-4">
+  <div className="bg-white border-b border-[#EBEBEB] pt-8 pb-6">
+    {/* Inner layout container with wrapping enabled to create two pristine rows */}
+    <div className="max-w-[1120px] mx-auto px-6 flex flex-wrap gap-x-4 gap-y-6">
       {sections.map((section) => {
         const isActive = section.id === activeId;
         return (
@@ -150,12 +151,27 @@ const SectionNav = ({ sections, activeId, onSelect }) => (
             key={section.id}
             type="button"
             onClick={() => onSelect(section.id)}
-            className="flex flex-col items-start shrink-0 group text-left pb-2 focus:outline-none"
+            className="flex flex-col items-start shrink-0 group text-left focus:outline-none"
           >
-            <div className={`w-[92px] h-[62px] md:w-[104px] md:h-[70px] rounded-[8px] overflow-hidden mb-1.5 border-2 transition ${isActive ? 'border-[#222222]' : 'border-transparent group-hover:opacity-90'}`}>
-              <img src={section.thumbnail} alt="" className="w-full h-full object-cover" />
+            {/* Increased bounding container dimensions to perfectly match the original visual weight */}
+            <div 
+              className={`w-[116px] h-[78px] rounded-[10px] overflow-hidden mb-2 border transition ${
+                isActive ? 'border-[#222222] scale-[1.01]' : 'border-transparent group-hover:opacity-90'
+              }`}
+            >
+              <img 
+                src={section.thumbnail} 
+                alt="" 
+                className="w-full h-full object-cover" 
+              />
             </div>
-            <span className={`text-[12px] transition max-w-[92px] md:max-w-[104px] truncate ${isActive ? 'font-semibold text-[#222222]' : 'text-[#717171] group-hover:text-[#222222]'}`}>
+            
+            {/* Title subtext with matched scaling context */}
+            <span 
+              className={`text-[13px] leading-[18px] transition max-w-[116px] ${
+                isActive ? 'font-medium text-[#222222]' : 'text-[#717171] group-hover:text-[#222222]'
+              }`}
+            >
               {section.title}
             </span>
           </button>
@@ -173,7 +189,7 @@ const PhotoGallerySection = ({ section, setSectionRef }) => (
   >
     {/* Left Panel: Description */}
     <div className="lg:sticky lg:top-[180px] lg:self-start space-y-1">
-      <h2 className="text-[22px] font-semibold text-[#222222] tracking-tight">{section.title}</h2>
+      <h2 className="text-[32px] font-semibold text-[#222222] tracking-tight">{section.title}</h2>
       <p className="text-[14px] text-[#717171] leading-relaxed font-normal">{section.description}</p>
     </div>
 
