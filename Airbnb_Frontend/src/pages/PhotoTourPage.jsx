@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FiChevronLeft, FiHeart, FiShare2 } from 'react-icons/fi';
+import { useEffect, useRef, useState } from 'react';
+import { FiChevronLeft, FiChevronRight, FiHeart, FiShare2, FiX } from 'react-icons/fi';
+import { MdOutlineGridView } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
-// Comprehensive listing dataset matching all items in the image layout lineup
 const photoSections = [
   {
     id: 'living-room-1',
@@ -105,9 +105,20 @@ const photoSections = [
   },
 ];
 
+const TOTAL_LIGHTBOX_PHOTOS = 43;
+
+const photoEntries = photoSections.flatMap((section) =>
+  section.images.map((src, imageIndex) => ({
+    sectionId: section.id,
+    sectionTitle: section.title,
+    src,
+    imageIndex,
+  })),
+);
+
 const PhotoTourHeader = ({ onBack, isSaved, onToggleSaved }) => (
-  <header className="sticky top-0 z-50 border-b border-[#EBEBEB] bg-white h-16 flex items-center">
-    <div className="w-full max-w-[1120px] mx-auto px-6 flex items-center justify-between">
+  <header className="sticky top-0 z-50 flex h-16 items-center border-b border-[#EBEBEB] bg-white">
+    <div className="mx-auto flex w-full max-w-[1120px] items-center justify-between px-6">
       <button
         type="button"
         onClick={onBack}
@@ -141,9 +152,8 @@ const PhotoTourHeader = ({ onBack, isSaved, onToggleSaved }) => (
 );
 
 const SectionNav = ({ sections, activeId, onSelect }) => (
-  <div className="bg-white border-b border-[#EBEBEB] pt-8 pb-6">
-    {/* Inner layout container with wrapping enabled to create two pristine rows */}
-    <div className="max-w-[1120px] mx-auto px-6 flex flex-wrap gap-x-4 gap-y-6">
+  <div className="border-b border-[#EBEBEB] bg-white pb-6 pt-8">
+    <div className="mx-auto flex max-w-[1120px] flex-wrap gap-x-4 gap-y-6 px-6">
       {sections.map((section) => {
         const isActive = section.id === activeId;
         return (
@@ -153,21 +163,15 @@ const SectionNav = ({ sections, activeId, onSelect }) => (
             onClick={() => onSelect(section.id)}
             className="flex flex-col items-start shrink-0 group text-left focus:outline-none"
           >
-            {/* Increased bounding container dimensions to perfectly match the original visual weight */}
-            <div 
+            <div
               className={`w-[116px] h-[78px] rounded-[10px] overflow-hidden mb-2 border transition ${
                 isActive ? 'border-[#222222] scale-[1.01]' : 'border-transparent group-hover:opacity-90'
               }`}
             >
-              <img 
-                src={section.thumbnail} 
-                alt="" 
-                className="w-full h-full object-cover" 
-              />
+              <img src={section.thumbnail} alt="" className="h-full w-full object-cover" />
             </div>
-            
-            {/* Title subtext with matched scaling context */}
-            <span 
+
+            <span
               className={`text-[13px] leading-[18px] transition max-w-[116px] ${
                 isActive ? 'font-medium text-[#222222]' : 'text-[#717171] group-hover:text-[#222222]'
               }`}
@@ -181,60 +185,167 @@ const SectionNav = ({ sections, activeId, onSelect }) => (
   </div>
 );
 
-const PhotoGallerySection = ({ section, setSectionRef }) => (
+const PhotoGallerySection = ({ section, setSectionRef, onOpenPhoto }) => (
   <section
     ref={(node) => setSectionRef(section.id, node)}
     id={section.id}
-    className="grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] gap-6 lg:gap-12 py-10 border-b border-[#F3F3F3] last:border-0"
+    className="grid grid-cols-1 gap-6 border-b border-[#F3F3F3] py-10 last:border-0 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-12"
   >
-    {/* Left Panel: Description */}
     <div className="lg:sticky lg:top-[180px] lg:self-start space-y-1">
       <h2 className="text-[32px] font-semibold text-[#222222] tracking-tight">{section.title}</h2>
       <p className="text-[14px] text-[#717171] leading-relaxed font-normal">{section.description}</p>
     </div>
 
-    {/* Right Panel: Media Block Setup */}
     <div className="space-y-4">
-      <div className="w-full overflow-hidden rounded-[12px] aspect-[1.5/1] bg-[#F7F7F7]">
+      <button
+        type="button"
+        onClick={() => onOpenPhoto(section.id, 0)}
+        className="block w-full overflow-hidden rounded-[12px] aspect-[1.5/1] bg-[#F7F7F7]"
+      >
         <img
           src={section.images[0]}
           alt={`${section.title} main view`}
           loading="lazy"
-          className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition duration-200"
+          className="h-full w-full cursor-pointer object-cover transition duration-200 hover:opacity-95"
         />
-      </div>
+      </button>
       <div className="grid grid-cols-2 gap-4">
-        <div className="overflow-hidden rounded-[12px] aspect-[1.5/1] bg-[#F7F7F7]">
+        <button
+          type="button"
+          onClick={() => onOpenPhoto(section.id, 1)}
+          className="overflow-hidden rounded-[12px] aspect-[1.5/1] bg-[#F7F7F7]"
+        >
           <img
             src={section.images[1]}
-            alt=""
+            alt={`${section.title} secondary view 1`}
             loading="lazy"
-            className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition duration-200"
+            className="h-full w-full cursor-pointer object-cover transition duration-200 hover:opacity-95"
           />
-        </div>
-        <div className="overflow-hidden rounded-[12px] aspect-[1.5/1] bg-[#F7F7F7]">
+        </button>
+        <button
+          type="button"
+          onClick={() => onOpenPhoto(section.id, 2)}
+          className="overflow-hidden rounded-[12px] aspect-[1.5/1] bg-[#F7F7F7]"
+        >
           <img
             src={section.images[2]}
-            alt=""
+            alt={`${section.title} secondary view 2`}
             loading="lazy"
-            className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition duration-200"
+            className="h-full w-full cursor-pointer object-cover transition duration-200 hover:opacity-95"
           />
-        </div>
+        </button>
       </div>
     </div>
   </section>
 );
 
+const PhotoLightbox = ({ photo, currentIndex, totalCount, onClose, onPrevious, onNext }) => {
+  if (!photo) {
+    return null;
+  }
+
+  return (
+    <div className="fixed inset-0 z-[70] bg-white">
+      <header className="flex h-16 items-center justify-between px-6">
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Back to photo tour"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[#222] transition hover:bg-[#F7F7F7]"
+        >
+          <MdOutlineGridView className="text-[20px]" />
+        </button>
+
+        <h1 className="text-[16px] font-semibold text-[#222]">{photo.sectionTitle}</h1>
+
+        <div className="flex items-center gap-3 text-[16px] text-[#222]">
+          <span className="whitespace-nowrap">{currentIndex + 1} of {totalCount}</span>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close lightbox"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[#222] transition hover:bg-[#F7F7F7]"
+          >
+            <FiX className="text-[20px]" />
+          </button>
+        </div>
+      </header>
+
+      <div className="relative flex h-[calc(100vh-4rem)] items-center justify-center overflow-hidden px-6">
+        <button
+          type="button"
+          onClick={onPrevious}
+          aria-label="Previous photo"
+          className="absolute left-6 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#DDDDDD] bg-white text-[#222] shadow-[0_1px_3px_rgba(0,0,0,0.12)] transition hover:shadow-[0_2px_8px_rgba(0,0,0,0.14)]"
+        >
+          <FiChevronLeft className="text-[18px]" />
+        </button>
+
+        <div className="w-full max-w-[760px]">
+          <img
+            src={photo.src}
+            alt={photo.sectionTitle}
+            className="h-auto w-full select-none rounded-[2px] object-cover"
+            draggable="false"
+          />
+        </div>
+
+        <button
+          type="button"
+          onClick={onNext}
+          aria-label="Next photo"
+          className="absolute right-6 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#DDDDDD] bg-white text-[#222] shadow-[0_1px_3px_rgba(0,0,0,0.12)] transition hover:shadow-[0_2px_8px_rgba(0,0,0,0.14)]"
+        >
+          <FiChevronRight className="text-[18px]" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const PhotoTourPage = () => {
   const navigate = useNavigate();
   const [isSaved, setIsSaved] = useState(false);
   const [activeId, setActiveId] = useState(photoSections[0].id);
+  const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState(null);
   const sectionRefs = useRef({});
 
   const setSectionRef = (sectionId, node) => {
     if (node) {
       sectionRefs.current[sectionId] = node;
     }
+  };
+
+  const openPhoto = (sectionId, imageIndex) => {
+    const targetIndex = photoEntries.findIndex(
+      (entry) => entry.sectionId === sectionId && entry.imageIndex === imageIndex,
+    );
+
+    if (targetIndex >= 0) {
+      setLightboxPhotoIndex(targetIndex);
+    }
+  };
+
+  const closePhoto = () => setLightboxPhotoIndex(null);
+
+  const previousPhoto = () => {
+    setLightboxPhotoIndex((currentIndex) => {
+      if (currentIndex === null) {
+        return currentIndex;
+      }
+
+      return currentIndex === 0 ? photoEntries.length - 1 : currentIndex - 1;
+    });
+  };
+
+  const nextPhoto = () => {
+    setLightboxPhotoIndex((currentIndex) => {
+      if (currentIndex === null) {
+        return currentIndex;
+      }
+
+      return currentIndex === photoEntries.length - 1 ? 0 : currentIndex + 1;
+    });
   };
 
   const scrollToSection = (sectionId) => {
@@ -253,6 +364,40 @@ const PhotoTourPage = () => {
       setActiveId(sectionId);
     }
   };
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = lightboxPhotoIndex === null ? previousOverflow : 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [lightboxPhotoIndex]);
+
+  useEffect(() => {
+    if (lightboxPhotoIndex === null) {
+      return undefined;
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        closePhoto();
+      }
+
+      if (event.key === 'ArrowLeft') {
+        previousPhoto();
+      }
+
+      if (event.key === 'ArrowRight') {
+        nextPhoto();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxPhotoIndex]);
+
+  const currentPhoto = lightboxPhotoIndex === null ? null : photoEntries[lightboxPhotoIndex];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -289,10 +434,24 @@ const PhotoTourPage = () => {
       <main className="max-w-[1120px] mx-auto px-6 pb-24 mt-2">
         <div className="flex flex-col">
           {photoSections.map((section) => (
-            <PhotoGallerySection key={section.id} section={section} setSectionRef={setSectionRef} />
+            <PhotoGallerySection
+              key={section.id}
+              section={section}
+              setSectionRef={setSectionRef}
+              onOpenPhoto={openPhoto}
+            />
           ))}
         </div>
       </main>
+
+      <PhotoLightbox
+        photo={currentPhoto}
+        currentIndex={lightboxPhotoIndex ?? 0}
+        totalCount={TOTAL_LIGHTBOX_PHOTOS}
+        onClose={closePhoto}
+        onPrevious={previousPhoto}
+        onNext={nextPhoto}
+      />
     </div>
   );
 };
